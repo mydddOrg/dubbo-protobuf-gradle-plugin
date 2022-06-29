@@ -1,3 +1,20 @@
+/*
+* Licensed to the Apache Software Foundation (ASF) under one or more
+* contributor license agreements.  See the NOTICE file distributed with
+* this work for additional information regarding copyright ownership.
+* The ASF licenses this file to You under the Apache License, Version 2.0
+* (the "License"); you may not use this file except in compliance with
+* the License.  You may obtain a copy of the License at
+*
+*     http://www.apache.org/licenses/LICENSE-2.0
+*
+* Unless required by applicable law or agreed to in writing, software
+* distributed under the License is distributed on an "AS IS" BASIS,
+* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+* See the License for the specific language governing permissions and
+* limitations under the License.
+*/
+
 {{#packageName}}
     package {{packageName}};
 {{/packageName}}
@@ -21,15 +38,14 @@ import static io.grpc.stub.ServerCalls.asyncUnimplementedUnaryCall;
 {{#deprecated}}
     @java.lang.Deprecated
 {{/deprecated}}
-@javax.annotation.Generated(
-value = "by DubboGrpc generator",
-comments = "Source: {{protoName}}")
 public final class {{className}} {
 private {{className}}() {}
 
 public static class Dubbo{{serviceName}}Stub implements I{{serviceName}} {
+
 protected URL url;
 protected ReferenceConfigBase<?> referenceConfig;
+
 protected {{serviceName}}Grpc.{{serviceName}}BlockingStub blockingStub;
 protected {{serviceName}}Grpc.{{serviceName}}FutureStub futureStub;
 protected {{serviceName}}Grpc.{{serviceName}}Stub stub;
@@ -37,6 +53,7 @@ protected {{serviceName}}Grpc.{{serviceName}}Stub stub;
 public Dubbo{{serviceName}}Stub(io.grpc.Channel channel, io.grpc.CallOptions callOptions, URL url, ReferenceConfigBase<?> referenceConfig) {
 this.url = url;
 this.referenceConfig = referenceConfig;
+
 blockingStub = {{serviceName}}Grpc.newBlockingStub(channel).build(channel, callOptions);
 futureStub = {{serviceName}}Grpc.newFutureStub(channel).build(channel, callOptions);
 stub = {{serviceName}}Grpc.newStub(channel).build(channel, callOptions);
@@ -174,6 +191,7 @@ public interface I{{serviceName}} {
     {{{javaDoc}}}
 {{/javaDoc}}
 public static abstract class {{serviceName}}ImplBase implements I{{serviceName}}, io.grpc.BindableService {
+
 private I{{serviceName}} proxiedImpl;
 
 public final void setProxiedImpl(I{{serviceName}} proxiedImpl) {

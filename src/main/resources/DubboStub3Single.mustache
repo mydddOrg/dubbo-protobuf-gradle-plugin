@@ -16,7 +16,7 @@
 */
 
 {{#packageName}}
-package {{packageName}};
+    package {{packageName}};
 {{/packageName}}
 
 import java.util.concurrent.CompletableFuture;
@@ -25,13 +25,35 @@ import java.util.concurrent.atomic.AtomicBoolean;
 {{#deprecated}}
     @java.lang.Deprecated
 {{/deprecated}}
-public interface {{interfaceClassName}} {
+public final class {{className}} {
+private static final AtomicBoolean registered = new AtomicBoolean();
 
-    static final String JAVA_SERVICE_NAME = "{{packageName}}.{{serviceName}}";
-    static final String SERVICE_NAME = "{{commonPackageName}}.{{serviceName}}";
+private static Class<?> init() {
+    Class<?> clazz = null;
+    try {
+        clazz = Class.forName({{serviceName}}Dubbo.class.getName());
+        if (registered.compareAndSet(false, true)) {
+            {{#methodTypes}}
+                org.apache.dubbo.rpc.protocol.tri.SingleProtobufUtils.marshaller(
+                {{.}}.getDefaultInstance());
+            {{/methodTypes}}
+        }
+    } catch (ClassNotFoundException e) {
+    // ignore
+    }
+    return clazz;
+}
 
-    // FIXME, initialize Dubbo3 stub when interface loaded, thinking of new ways doing this.
-    static final boolean inited = {{className}}.init();
+private {{serviceName}}Dubbo() {}
+
+public static final String SERVICE_NAME = "{{packageName}}.{{serviceName}}";
+
+/**
+* Code generated for Dubbo
+*/
+public interface I{{serviceName}} {
+
+    static Class<?> clazz = init();
 
 {{#unaryMethods}}
     {{#javaDoc}}
@@ -67,5 +89,7 @@ public interface {{interfaceClassName}} {
     {{/deprecated}}
     org.apache.dubbo.common.stream.StreamObserver<{{inputType}}> {{methodName}}(org.apache.dubbo.common.stream.StreamObserver<{{outputType}}> responseObserver);
 {{/biStreamingMethods}}
+
+}
 
 }
